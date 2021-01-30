@@ -9,6 +9,8 @@ pygame.init()
 class GatorJump:
     def __init__(self):
         self.screen = pygame.display.set_mode((600, 800))
+        self.screen_length = 600
+        self.screen_width = 800
         self.background = pygame.transform.scale(pygame.image.load("img/bg2.jpg"), (600, 800))
         self.player = pygame.transform.scale(pygame.image.load("img/gatorRight.png"), (80, 100))
         self.platformStation = pygame.transform.scale(pygame.image.load("img/platform.png"), (75, 15))
@@ -24,6 +26,7 @@ class GatorJump:
         self.directionx = 0
         self.score_value = 0
         self.font = pygame.font.Font('img/Subway-Black.ttf', 32)
+        self.player_died = False
 
     def updatePlayer(self):
         if not self.jump:
@@ -102,10 +105,16 @@ class GatorJump:
         self.screen.blit(score, (10, 10))
 
     def die(self):
-        # error: doesnt print message
-        message = self.font.render("You die... \n Your Score is: " + str(self.score_value) + "\n Press Any Key to Try Again ", True, (255, 255, 255))
+        # error: doesnt print message - fixed
+        self.player_died = True
+        message = self.font.render("You died...", True, (255, 255, 255))
+        message2 = self.font.render("Your Score is: " + str(self.score_value), True, (255, 255, 255))
+        message3 = self.font.render("Press Any Key to Try Again!", True, (255, 255, 255))
         print("you should print the message!")
-        self.screen.blit(message, (200, 200))
+        self.screen.blit(message, (self.screen_length*0.35, self.screen_width*0.35))
+        self.screen.blit(message2, (self.screen_length*0.27, self.screen_width*0.4))
+        self.screen.blit(message3, (self.screen_length*0.11, self.screen_width*0.45))
+        pygame.display.update()     #adding this prints message!!!
         while True:
             for event in pygame.event.get():
                 if event.type == QUIT:
@@ -130,13 +139,16 @@ class GatorJump:
                     sys.exit()
             if self.playerY - self.cameray > 800:
                 print("die reached")
+                self.player_died = True
                 self.die()
+            if self.player_died:
                 self.cameray = 0
                 self.score_value = 0
                 self.platforms = [[250, 700, 0]]
-                self.generatePlatform()
                 self.playerX = 250
                 self.playerY = 600
+                self.generatePlatform()
+                self.player_died = False
             self.drawPlatform()
             self.updatePlayer()
             self.showScore()
