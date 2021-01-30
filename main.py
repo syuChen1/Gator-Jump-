@@ -3,6 +3,7 @@ import sys
 from pygame.locals import *
 import random
 import buttons
+from pygame import mixer 
 
 pygame.init() 
 
@@ -14,7 +15,7 @@ class GatorJump:
         self.background = pygame.transform.scale(pygame.image.load("img/bg2.jpg"), (600, 800))
         self.player = pygame.transform.scale(pygame.image.load("img/gatorRight.png"), (80, 100))
         self.platformStation = pygame.transform.scale(pygame.image.load("img/platform.png"), (75, 15))
-        self.platformMove = pygame.transform.scale(pygame.image.load("img/bird1.png"), (75, 15))
+        self.platformMove = pygame.transform.scale(pygame.image.load("img/bird2.png"), (75, 15))
         self.spring = pygame.transform.scale(pygame.image.load("img/spring.png"), (15, 10))
         self.playerX = 250
         self.playerY = 600
@@ -68,6 +69,9 @@ class GatorJump:
             rect = pygame.Rect(p[0]+10, p[1], self.platformStation.get_width()-20, self.platformStation.get_height()-5)
             player = pygame.Rect(self.playerX+10, self.playerY+70, self.player.get_width()-20, self.player.get_height()-73)
             if rect.colliderect(player) and self.gravity and self.playerY < (p[1] - self.cameray) and ((p[1] - self.cameray) < 785):
+                mixer.music.load('img/spring.wav')
+                mixer.music.set_volume(0.17)
+                mixer.music.play(0)
                 self.jump = 20
                 self.gravity = 0
             if p[2] == 1:
@@ -111,10 +115,7 @@ class GatorJump:
             if p[2] == 0:
                 self.screen.blit((self.platformStation), (p[0], p[1] - self.cameray))
             elif p[2] == 1:
-                self.screen.blit(self.platformMove, (p[0], p[1] - self.cameray))
-            
-            
-        
+                self.screen.blit(self.platformMove, (p[0], p[1] - self.cameray))   
 
     def generatePlatform(self):
         on = 800
