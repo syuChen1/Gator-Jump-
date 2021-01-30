@@ -1,18 +1,28 @@
 import pygame
+import sys
+from pygame.locals import *
 
-pygame.init()
+class GatorJump:
+    def __init__(self):
+        self.screen = pygame.display.set_mode((800, 600))
+        
 
-# Create the screen
-screen = pygame.display.set_mode((1200, 900))
+    def updatePlayer(self):
+        pass
+    
 
-pygame.display.set_caption("Gator Jump!")
-pygame.display.set_icon(pygame.image.load('img/gatorIcon.png'))
+    def run(self):
+        #Set title and icon
+        pygame.display.set_caption("Gator Jump!")
+        pygame.display.set_icon(pygame.image.load('img/gatorIcon.png'))
 
+        #Game Loop
+        while True:
+            self.screen.fill((255,255,255))
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    sys.exit()
 
+            pygame.display.update()
 
-# Game Loop
-running = True
-while running:
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            running = False
+GatorJump().run()
