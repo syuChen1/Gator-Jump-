@@ -32,7 +32,8 @@ class GatorJump:
     def updatePlayer(self):
         if not self.jump:
             self.playerY += self.gravity
-            self.gravity += 0.5
+            if(self.gravity < 10):
+                self.gravity += 0.5
         elif self.jump:
             self.playerY -= self.jump
             self.jump -= 1
@@ -82,7 +83,7 @@ class GatorJump:
             player = pygame.Rect(self.playerX+10, self.playerY+70, self.player.get_width()-20, self.player.get_height()-73)
             if rect.colliderect(player) and self.gravity and self.playerY < (spring[1] - self.cameray) and ((spring[1] - self.cameray) < 785):
                 print("touched spring")
-                r = random.randint(80,120)
+                r = random.randint(40,60)
                 self.jump = r
                 self.cameray -= r
                 self.gravity = 0
