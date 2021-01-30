@@ -1,8 +1,8 @@
-
 import pygame
 import sys
 from pygame.locals import *
 import random
+import buttons
 
 pygame.init() 
 
@@ -27,6 +27,8 @@ class GatorJump:
         self.score_value = 0
         self.font = pygame.font.Font('img/Subway-Black.ttf', 32)
         self.player_died = False
+        self.in_main_menu = True
+        self.play_button = buttons.buttons((255, 255, 255), self.screen_width/2 - 200, (self.screen_length*0.8), 200, 100, "Play!")
 
     def updatePlayer(self):
         if not self.jump:
@@ -123,10 +125,36 @@ class GatorJump:
                 if event.type == KEYDOWN:
                     return
 
+    def draw_menu(self):
+        self.screen.fill((64, 174, 118))
+        title = self.font.render("Welcome to Gator Jump!", True, (255, 255, 255))
+        self.screen.blit(title, (self.screen_length*0.11, self.screen_width*0.35))
+        self.play_button.draw_button(self.screen, 40, (0,0,0))
+        pygame.display.update()
+        #pygame.draw.rect(self.screen, (0,0,0), (round(self.screen_width - 2, self.screen_length - 2), 
+         #   round(self.screen_width + 4, self.screen_length + 4)), 0)
+        #play_button = self.font.render("Play!", 1, (255, 255, 255))
+        #self.screen.blit(play_button, (round(self.screen_width - 2, self.screen_length - 2), 
+         #   round(self.screen_width + 4, self.screen_length + 4)))
+
+    def main_menu(self):
+        self.draw_menu()
+        while True:
+            for event in pygame.event.get():
+                mouse_pos = pygame.mouse.get_pos()
+                if event.type == pygame.QUIT:
+                    sys.exit()
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    if self.play_button.is_over(mouse_pos):
+                        return
+        
     def run(self):
         #Set title and icon
         pygame.display.set_caption("Gator Jump!")
         pygame.display.set_icon(pygame.image.load('img/gatorIcon.png'))
+
+        self.main_menu()
+
         clock = pygame.time.Clock()
         self.generatePlatform()
         #Game Loop
