@@ -7,17 +7,46 @@ import random
 class GatorJump:
     def __init__(self):
         self.screen = pygame.display.set_mode((600, 800))
+        self.player = pygame.transform.scale(pygame.image.load("img/gatorPlayer.png"), (80, 100))
+        self.playerX = 300
+        self.playerY = 600
+        self.jump = 0
+        self.gravity = 0
         self.platforms = []
         self.cameray = 0
         self.size = width, height = (75,10)
         self.surf = pygame.Surface(self.size)
-        self.ymovement = 0
-        self.directionx = 1
-        self.directiony = 1
+        self.xmovement = 0
+        self.directionx = 0
 
     def updatePlayer(self):
-        self.cameray -= 0.1
+        # if not self.jump:
+        #     self.playerY += self.gravity
+        #     self.gravity += 1
+        # elif self.jump:
+        #     self.playerY -= self.jump
+        #     self.jump -= 1
+        self.cameray -= 0.2
+        key = pygame.key.get_pressed()
+        if key[K_RIGHT]:
+            if self.xmovement < 1:
+                self.xmovement += 0.1
+
+        elif key[K_LEFT]:
+            if self.xmovement > -1:
+                self.xmovement -= 0.1
+        else:
+            if self.xmovement > 0:
+                self.xmovement -= 0.1
+            elif self.xmovement < 0:
+                self.xmovement += 0.1
+        self.playerX += self.xmovement
+        self.screen.blit(self.player, (self.playerX, self.playerY))
     
+    def updatePlatform(self):
+        pass
+
+
     def drawPlatform(self):
         for p in self.platforms:
             check = self.platforms[1][1] - self.cameray
@@ -32,7 +61,6 @@ class GatorJump:
             x = random.randint(-0,525)
             self.platforms.append((x,on))
             on -= 50
-        print (self.platforms)
 
     def run(self):
         #Set title and icon
