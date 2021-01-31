@@ -215,6 +215,10 @@ class GatorJump:
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if self.play_button.is_over(mouse_pos):
                         self.in_main_menu = False
+                        self.menuMusic.stop()
+                        mixer.music.load('img/music1.wav')
+                        mixer.music.set_volume(0.3)
+                        mixer.music.play(-1)
                         return  
                     if self.change_background.is_over(mouse_pos):
                         self.in_settings = True
@@ -227,10 +231,8 @@ class GatorJump:
         pygame.display.set_icon(pygame.image.load('img/gatorIcon.png'))
 
         self.main_menu()
-        self.menuMusic.stop()
-        mixer.music.load('img/music1.wav')
-        mixer.music.set_volume(0.3)
-        mixer.music.play(-1)
+        
+        
 
         clock = pygame.time.Clock()
         self.generatePlatform()
