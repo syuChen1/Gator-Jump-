@@ -15,7 +15,7 @@ class GatorJump:
         self.background = pygame.transform.scale(pygame.image.load("img/bg2.jpg"), (600, 800))
         self.player = pygame.transform.scale(pygame.image.load("img/gatorRight.png"), (80, 100))
         self.platformStation = pygame.transform.scale(pygame.image.load("img/platform.png"), (75, 15))
-        self.platformMove = pygame.transform.scale(pygame.image.load("img/bird2.png"), (75, 15))
+        self.plane = pygame.transform.scale(pygame.image.load("img/plane-left.png"), (75, 15))
         self.spring = pygame.transform.scale(pygame.image.load("img/spring.png"), (15, 10))
         self.playerX = 250
         self.playerY = 600
@@ -76,13 +76,17 @@ class GatorJump:
                 self.gravity = 0
             if p[2] == 1:
                 if p[-1] == 1:
+                    self.plane = pygame.transform.scale(pygame.image.load("img/plane-right.png"), (75, 15))
                     p[0] += 3
                     if p[0] > 525:
                         p[-1] = 0
                 else:
+                    self.plane = pygame.transform.scale(pygame.image.load("img/plane-left.png"), (75, 15))
                     p[0] -= 3
                     if p[0] <= 0:
                         p[-1] = 1
+                self.screen.blit(self.plane, (p[0], p[1] - self.cameray)) 
+
         for spring in self.springs:
             self.screen.blit(self.spring, (spring[0], spring[1] - self.cameray))
             rect = pygame.Rect(spring[0], spring[1], self.spring.get_width(), self.spring.get_height())
@@ -108,14 +112,13 @@ class GatorJump:
                 
                 coords = self.platforms[-1]
                 r = random.randint(0, 1000)
-                if r > 900 and platform == 0:
+                if r > 960 and platform == 0:
                     self.springs.append([coords[0] + random.randint(0,60), coords[1]-10, 0])
                 self.platforms.pop(0)
 
             if p[2] == 0:
                 self.screen.blit((self.platformStation), (p[0], p[1] - self.cameray))
-            elif p[2] == 1:
-                self.screen.blit(self.platformMove, (p[0], p[1] - self.cameray))   
+            
 
     def generatePlatform(self):
         on = 800
