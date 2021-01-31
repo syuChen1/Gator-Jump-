@@ -181,6 +181,8 @@ class GatorJump:
          #   round(self.screen_width + 4, self.screen_length + 4)))
 
     def main_menu(self):
+        if mixer.music.get_busy():
+            mixer.music.stop()
         self.draw_menu()
         while True: 
             self.menuMusic.set_volume(0.1)
@@ -200,7 +202,7 @@ class GatorJump:
         pygame.display.set_icon(pygame.image.load('img/gatorIcon.png'))
 
         self.main_menu()
-        self.menuMusic.fadeout(2000)
+        self.menuMusic.stop()
         mixer.music.load('img/music1.wav')
         mixer.music.set_volume(0.3)
         mixer.music.play(-1)
@@ -217,7 +219,6 @@ class GatorJump:
                     sys.exit()
             if self.playerY - self.cameray > 800:
                 self.player_died = True
-                mixer.music.fadeout(2000)
                 self.die()
             if self.player_died:
                 self.cameray = 0
