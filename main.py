@@ -127,7 +127,6 @@ class GatorJump:
             rect = pygame.Rect(spring[0], spring[1], self.spring.get_width(), self.spring.get_height())
             player = pygame.Rect(self.playerX+10, self.playerY+70, self.player.get_width()-20, self.player.get_height()-73)
             if rect.colliderect(player) and self.gravity and self.playerY < (spring[1] - self.cameray) and ((spring[1] - self.cameray) < 785):
-                print("touched spring")
                 springSound = mixer.Sound('img/jump.wav') #boing.wav but crashes code
                 springSound.set_volume(0.4)
                 springSound.play(0)
