@@ -141,18 +141,22 @@ class GatorJump:
         self.player_died = True
         message = self.font.render("You died...", True, (255, 255, 255))
         message2 = self.font.render("Your Score is: " + str(self.score_value), True, (255, 255, 255))
-        message3 = self.font.render("Press Any Key to Try Again!", True, (255, 255, 255))
-        print("you should print the message!")
+        message3 = self.font.render("Press ESC to go back to Main Menu", True, (255, 255, 255))
+        message4 = self.font.render("Or Press Any Key to Play Again!", True, (255, 255, 255))
         self.screen.blit(message, (self.screen_length*0.35, self.screen_width*0.35))
         self.screen.blit(message2, (self.screen_length*0.27, self.screen_width*0.4))
-        self.screen.blit(message3, (self.screen_length*0.11, self.screen_width*0.45))
+        self.screen.blit(message3, (self.screen_length*0.01, self.screen_width*0.45))
+        self.screen.blit(message4, (self.screen_length*0.04, self.screen_width*0.50))
         pygame.display.update()     #adding this prints message!!!
         while True:
             for event in pygame.event.get():
                 if event.type == QUIT:
                     pygame.quit()
                     sys.exit()
-                if event.type == KEYDOWN:
+                key = pygame.key.get_pressed()
+                if key[K_ESCAPE]:
+                    self.main_menu()
+                else:
                     return
 
     def draw_menu(self):
@@ -196,7 +200,6 @@ class GatorJump:
                 if event.type == pygame.QUIT:
                     sys.exit()
             if self.playerY - self.cameray > 800:
-                print("die reached")
                 self.player_died = True
                 self.die()
             if self.player_died:
