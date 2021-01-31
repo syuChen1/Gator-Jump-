@@ -15,7 +15,7 @@ class GatorJump:
         self.background = pygame.transform.scale(pygame.image.load("img/bg2.jpg"), (600, 800))
         self.player = pygame.transform.scale(pygame.image.load("img/gatorRight.png"), (80, 100))
         self.platformStation = pygame.transform.scale(pygame.image.load("img/platform.png"), (75, 15))
-        self.platformMove = pygame.transform.scale(pygame.image.load("img/bird2.png"), (75, 15))
+        self.plane = pygame.transform.scale(pygame.image.load("img/plane-left.png"), (75, 15))
         self.spring = pygame.transform.scale(pygame.image.load("img/spring.png"), (15, 10))
         self.playerX = 250
         self.playerY = 600
@@ -77,13 +77,17 @@ class GatorJump:
                 self.gravity = 0
             if p[2] == 1:
                 if p[-1] == 1:
+                    self.plane = pygame.transform.scale(pygame.image.load("img/plane-right.png"), (75, 15))
                     p[0] += 3
                     if p[0] > 525:
                         p[-1] = 0
                 else:
+                    self.plane = pygame.transform.scale(pygame.image.load("img/plane-left.png"), (75, 15))
                     p[0] -= 3
                     if p[0] <= 0:
                         p[-1] = 1
+                self.screen.blit(self.plane, (p[0], p[1] - self.cameray)) 
+
         for spring in self.springs:
             self.screen.blit(self.spring, (spring[0], spring[1] - self.cameray))
             rect = pygame.Rect(spring[0], spring[1], self.spring.get_width(), self.spring.get_height())
@@ -112,14 +116,13 @@ class GatorJump:
                 
                 coords = self.platforms[-1]
                 r = random.randint(0, 1000)
-                if r > 900 and platform == 0:
+                if r > 960 and platform == 0:
                     self.springs.append([coords[0] + random.randint(0,60), coords[1]-10, 0])
                 self.platforms.pop(0)
 
             if p[2] == 0:
                 self.screen.blit((self.platformStation), (p[0], p[1] - self.cameray))
-            elif p[2] == 1:
-                self.screen.blit(self.platformMove, (p[0], p[1] - self.cameray))   
+            
 
     def generatePlatform(self):
         on = 800
@@ -142,19 +145,27 @@ class GatorJump:
         self.player_died = True
         message = self.font.render("You died...", True, (255, 255, 255))
         message2 = self.font.render("Your Score is: " + str(self.score_value), True, (255, 255, 255))
-        message3 = self.font.render("Press Any Key to Try Again!", True, (255, 255, 255))
-        print("you should print the message!")
+        message3 = self.font.render("Press ESC to go back to Main Menu", True, (255, 255, 255))
+        message4 = self.font.render("Or Press Any Key to Play Again!", True, (255, 255, 255))
         self.screen.blit(message, (self.screen_length*0.35, self.screen_width*0.35))
         self.screen.blit(message2, (self.screen_length*0.27, self.screen_width*0.4))
-        self.screen.blit(message3, (self.screen_length*0.11, self.screen_width*0.45))
+        self.screen.blit(message3, (self.screen_length*0.01, self.screen_width*0.45))
+        self.screen.blit(message4, (self.screen_length*0.04, self.screen_width*0.50))
         pygame.display.update()     #adding this prints message!!!
         while True:
             for event in pygame.event.get():
                 if event.type == QUIT:
                     pygame.quit()
                     sys.exit()
+<<<<<<< HEAD
                 if event.type == KEYDOWN:
                     mixer.music.play(-1)
+=======
+                key = pygame.key.get_pressed()
+                if key[K_ESCAPE]:
+                    self.main_menu()
+                else:
+>>>>>>> aa90452a8b05ec74823888b7f63430b8aceb22cd
                     return
 
     def draw_menu(self):
@@ -204,7 +215,6 @@ class GatorJump:
                 if event.type == pygame.QUIT:
                     sys.exit()
             if self.playerY - self.cameray > 800:
-                print("die reached")
                 self.player_died = True
                 mixer.music.fadeout(2000)
                 self.die()
