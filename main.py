@@ -157,15 +157,11 @@ class GatorJump:
                 if event.type == QUIT:
                     pygame.quit()
                     sys.exit()
-<<<<<<< HEAD
                 if event.type == KEYDOWN:
-                    mixer.music.play(-1)
-=======
-                key = pygame.key.get_pressed()
+                    key = pygame.key.get_pressed()
                 if key[K_ESCAPE]:
                     self.main_menu()
                 else:
->>>>>>> aa90452a8b05ec74823888b7f63430b8aceb22cd
                     return
 
     def draw_menu(self):
@@ -181,6 +177,8 @@ class GatorJump:
          #   round(self.screen_width + 4, self.screen_length + 4)))
 
     def main_menu(self):
+        if mixer.music.get_busy():
+            mixer.music.stop()
         self.draw_menu()
         while True: 
             self.menuMusic.set_volume(0.1)
@@ -199,7 +197,7 @@ class GatorJump:
         pygame.display.set_icon(pygame.image.load('img/gatorIcon.png'))
 
         self.main_menu()
-        self.menuMusic.fadeout(2000)
+        self.menuMusic.stop()
         mixer.music.load('img/music1.wav')
         mixer.music.set_volume(0.3)
         mixer.music.play(-1)
@@ -216,7 +214,6 @@ class GatorJump:
                     sys.exit()
             if self.playerY - self.cameray > 800:
                 self.player_died = True
-                mixer.music.fadeout(2000)
                 self.die()
             if self.player_died:
                 self.cameray = 0
