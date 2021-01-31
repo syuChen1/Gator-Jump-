@@ -24,7 +24,7 @@ class GatorJump:
         self.playK = False
         self.playF = False
         self.playerX = 200
-        self.playerY = 520
+        self.playerY = 430
         self.faceX = 0
         self.jump = 0
         self.gravity = 0
@@ -336,4 +336,3 @@ class GatorJump:
             pygame.display.flip()
 
 GatorJump().run()
-cv2.destroyWindow("facedetect")
