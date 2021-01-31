@@ -35,14 +35,16 @@ class GatorJump:
         self.directionx = 0
         self.score_value = 0
         self.font = pygame.font.Font('img/Subway-Black.ttf', 32)
+        self.title_font = pygame.font.Font('img/Subway-Black.ttf', 80)
         self.player_died = False
         self.in_main_menu = True
         self.in_settings = False
-        self.playK_button = buttons.buttons((255, 255, 255), self.screen_width/2 - 290, (self.screen_length*0.625), 420, 80, "Play With Keyboard")
-        self.playF_button = buttons.buttons((255, 255, 255), self.screen_width/2 - 290, (self.screen_length*0.8), 420, 80, "Play With Face")
+        self.playK_button = buttons.buttons((255, 255, 255), self.screen_width/2 - 290, (self.screen_length*0.625), 420, 80, "Play with Keyboard")
+        self.playF_button = buttons.buttons((255, 255, 255), self.screen_width/2 - 290, (self.screen_length*0.8), 420, 80, "Play with Face")
         self.menuMusic = mixer.Sound('img/menuMusic.wav')
         self.return_to_menu = buttons.buttons((255, 255, 255), self.screen_width/2 - 250, (self.screen_length*0.7), 350, 100, "Back to Main Menu")
-        self.change_background = buttons.buttons((255, 255, 255), self.screen_width/2 - 290, (self.screen_length*0.975), 420, 80, "Change Background")
+        self.exit_game = buttons.buttons((255, 255, 255), self.screen_width / 2 - 290, (self.screen_length * 0.975), 420, 80, "Exit Game")
+        #self.change_background = buttons.buttons((255, 255, 255), self.screen_width/2 - 290, (self.screen_length*0.975), 420, 80, "Change Background")
 
 
     def updatePlayer_Face(self):
@@ -126,7 +128,7 @@ class GatorJump:
             player = pygame.Rect(self.playerX+10, self.playerY+70, self.player.get_width()-20, self.player.get_height()-73)
             if rect.colliderect(player) and self.gravity and self.playerY < (spring[1] - self.cameray) and ((spring[1] - self.cameray) < 785):
                 print("touched spring")
-                springSound = mixer.Sound('img/boing.wav')
+                springSound = mixer.Sound('img/jump.wav') #boing.wav but crashes code
                 springSound.set_volume(0.4)
                 springSound.play(0)
                 r = random.randint(40,60)
@@ -201,6 +203,7 @@ class GatorJump:
                 if event.type == pygame.KEYDOWN:
                     return
 
+    '''
     def settings_menu(self):
         self.screen.fill((64, 173, 174))
         title = self.font.render("Background Settings", True, (255, 255, 255))
@@ -218,14 +221,21 @@ class GatorJump:
                         self.in_main_menu = True
                         self.main_menu()
                         return
+    '''
 
     def draw_menu(self):
         self.screen.fill([54,42,72])
-        title = self.font.render("Welcome to Gator Jump!", True, (255, 255, 255))
-        self.screen.blit(title, (self.screen_width*0.11, self.screen_length*0.35))
+        self.screen.blit(self.background, (0, 0))
+        intro_title = self.font.render("WELCOME TO", True, (255, 255, 255))
+        title = self.title_font.render("Gator Jump!", True, (255, 255, 255))
+        self.screen.blit(intro_title, (self.screen_width * 0.22, self.screen_length * 0.15))
+        self.screen.blit(title, (self.screen_width*0.02, self.screen_length*0.25))
+        self.screen.blit(pygame.transform.scale(pygame.image.load("img/gatorRight.png"), (80, 100)), (self.screen_width*.09, self.screen_length*0.42))
+        self.screen.blit(pygame.transform.scale(pygame.image.load("img/gatorLeft.png"), (80, 100)), (self.screen_width*.575, self.screen_length*0.42))
         self.playK_button.draw_button(self.screen, 40, (0,0,0))
         self.playF_button.draw_button(self.screen, 40, (0,0,0))
-        self.change_background.draw_button(self.screen, 40, (0,0,0))
+        self.exit_game.draw_button(self.screen, 40, (0,0,0))
+        #self.change_background.draw_button(self.screen, 40, (0,0,0))
         pygame.display.update()
         #pygame.draw.rect(self.screen, (0,0,0), (round(self.screen_width - 2, self.screen_length - 2), 
          #   round(self.screen_width + 4, self.screen_length + 4)), 0)
@@ -261,9 +271,10 @@ class GatorJump:
                         mixer.music.set_volume(0.3)
                         mixer.music.play(-1)
                         return 
-                    if self.change_background.is_over(mouse_pos):
-                        self.in_settings = True
-                        self.settings_menu()
+                    if self.exit_game.is_over(mouse_pos):
+                        sys.exit()
+                        #self.in_settings = True
+                        #self.settings_menu()
                         return
         pass
 
