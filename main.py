@@ -6,7 +6,6 @@ import buttons
 import FaceRec
 from pygame import mixer 
 import cv2
-import base64
 
 pygame.init() 
 face = cv2.CascadeClassifier('img/frontface.xml')
@@ -145,7 +144,7 @@ class GatorJump:
                     platform = 0
                 elif platform <= 1000:
                     platform = 1
-                self.platforms.append([random.randint(0,525), self.platforms[-1][1] - 50, platform, 0])
+                self.platforms.append([random.randint(0,485), self.platforms[-1][1] - 50, platform, 0])
                 
                 coords = self.platforms[-1]
                 r = random.randint(0, 1000)
@@ -160,7 +159,7 @@ class GatorJump:
     def generatePlatform(self):
         on = 700
         while on > -150:
-            x = random.randint(0,450)
+            x = random.randint(0,485)
             platform = random.randint(0,1000)
             if platform < 850:
                 platform = 0
@@ -221,7 +220,7 @@ class GatorJump:
                         return
 
     def draw_menu(self):
-        self.screen.fill((64, 174, 118))
+        self.screen.fill([54,42,72])
         title = self.font.render("Welcome to Gator Jump!", True, (255, 255, 255))
         self.screen.blit(title, (self.screen_width*0.11, self.screen_length*0.35))
         self.playK_button.draw_button(self.screen, 40, (0,0,0))
@@ -314,15 +313,15 @@ class GatorJump:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     sys.exit()
-            if self.playerY - self.cameray > 800:
+            if self.playerY - self.cameray > 720:
                 self.player_died = True
                 self.die()
             if self.player_died:
                 self.cameray = 0
                 self.score_value = 0
-                self.platforms = [[250, 700, 0]]
-                self.playerX = 250
-                self.playerY = 600
+                self.platforms = [[200, 620, 0]]
+                self.playerX = 200
+                self.playerY = 520
                 self.generatePlatform()
                 self.player_died = False
             if self.in_main_menu:
