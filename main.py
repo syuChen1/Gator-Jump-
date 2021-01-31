@@ -30,9 +30,11 @@ class GatorJump:
         self.font = pygame.font.Font('img/Subway-Black.ttf', 32)
         self.player_died = False
         self.in_main_menu = True
+        self.in_settings = False
         self.play_button = buttons.buttons((255, 255, 255), self.screen_width/2 - 200, (self.screen_length*0.8), 200, 100, "Play!")
         self.menuMusic = mixer.Sound('img/menuMusic.wav')
-        self.return_to_menu = buttons.buttons((255, 255, 255), self.screen_width/2 - 300, (self.screen_length*0.8), 350, 100, "Back to Main Menu")
+        self.return_to_menu = buttons.buttons((255, 255, 255), self.screen_width/2 - 285, (self.screen_length*0.8), 350, 100, "Back to Main Menu")
+        self.change_background = buttons.buttons((255, 255, 255), self.screen_width/2 - 300, (self.screen_length), 400, 100, "Change Background")
 
     def updatePlayer(self):
         if not self.jump:
@@ -168,11 +170,30 @@ class GatorJump:
                 if event.type == pygame.KEYDOWN:
                     return
 
+    def settings_menu(self):
+        self.screen.fill((64, 173, 174))
+        title = self.font.render("Background Settings", True, (255, 255, 255))
+        self.screen.blit(title, (self.screen_width*0.15, self.screen_length*0.35))
+        self.return_to_menu.draw_button(self.screen, 40, (0,0,0))
+        pygame.display.update()
+        while True:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    sys.exit()
+                mouse_pos = pygame.mouse.get_pos()
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    if self.return_to_menu.is_over(mouse_pos):
+                        self.in_settings = False
+                        self.in_main_menu = True
+                        self.main_menu()
+                        return
+
     def draw_menu(self):
         self.screen.fill((64, 174, 118))
         title = self.font.render("Welcome to Gator Jump!", True, (255, 255, 255))
-        self.screen.blit(title, (self.screen_length*0.11, self.screen_width*0.35))
+        self.screen.blit(title, (self.screen_width*0.11, self.screen_length*0.35))
         self.play_button.draw_button(self.screen, 40, (0,0,0))
+        self.change_background.draw_button(self.screen, 40, (0,0,0))
         pygame.display.update()
         #pygame.draw.rect(self.screen, (0,0,0), (round(self.screen_width - 2, self.screen_length - 2), 
          #   round(self.screen_width + 4, self.screen_length + 4)), 0)
@@ -194,7 +215,11 @@ class GatorJump:
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if self.play_button.is_over(mouse_pos):
                         self.in_main_menu = False
-                        return    
+                        return  
+                    if self.change_background.is_over(mouse_pos):
+                        self.in_settings = True
+                        self.settings_menu()
+                        return
         
     def run(self):
         #Set title and icon
