@@ -31,6 +31,7 @@ class GatorJump:
         self.player_died = False
         self.in_main_menu = True
         self.play_button = buttons.buttons((255, 255, 255), self.screen_width/2 - 200, (self.screen_length*0.8), 200, 100, "Play!")
+        self.menuMusic = mixer.Sound('img/menuMusic.wav')
 
     def updatePlayer(self):
         if not self.jump:
@@ -69,9 +70,9 @@ class GatorJump:
             rect = pygame.Rect(p[0]+10, p[1], self.platformStation.get_width()-20, self.platformStation.get_height()-5)
             player = pygame.Rect(self.playerX+10, self.playerY+70, self.player.get_width()-20, self.player.get_height()-73)
             if rect.colliderect(player) and self.gravity and self.playerY < (p[1] - self.cameray) and ((p[1] - self.cameray) < 785):
-                mixer.music.load('img/spring.wav')
-                mixer.music.set_volume(0.17)
-                mixer.music.play(0)
+                jumpSound = mixer.Sound('img/jump.wav')
+                jumpSound.set_volume(0.12)
+                jumpSound.play(0)
                 self.jump = 20
                 self.gravity = 0
             if p[2] == 1:
@@ -89,6 +90,9 @@ class GatorJump:
             player = pygame.Rect(self.playerX+10, self.playerY+70, self.player.get_width()-20, self.player.get_height()-73)
             if rect.colliderect(player) and self.gravity and self.playerY < (spring[1] - self.cameray) and ((spring[1] - self.cameray) < 785):
                 print("touched spring")
+                springSound = mixer.Sound('img/boing.wav')
+                springSound.set_volume(0.4)
+                springSound.play(0)
                 r = random.randint(40,60)
                 self.jump = r
                 self.cameray -= r
@@ -150,6 +154,7 @@ class GatorJump:
                     pygame.quit()
                     sys.exit()
                 if event.type == KEYDOWN:
+                    mixer.music.play(-1)
                     return
 
     def draw_menu(self):
@@ -166,14 +171,16 @@ class GatorJump:
 
     def main_menu(self):
         self.draw_menu()
-        while True:
+        while True: 
+            self.menuMusic.set_volume(0.1)
+            self.menuMusic.play(-1)
             for event in pygame.event.get():
                 mouse_pos = pygame.mouse.get_pos()
                 if event.type == pygame.QUIT:
                     sys.exit()
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if self.play_button.is_over(mouse_pos):
-                        return
+                        return    
         
     def run(self):
         #Set title and icon
@@ -181,6 +188,10 @@ class GatorJump:
         pygame.display.set_icon(pygame.image.load('img/gatorIcon.png'))
 
         self.main_menu()
+        self.menuMusic.fadeout(2000)
+        mixer.music.load('img/music1.wav')
+        mixer.music.set_volume(0.3)
+        mixer.music.play(-1)
 
         clock = pygame.time.Clock()
         self.generatePlatform()
@@ -195,6 +206,7 @@ class GatorJump:
             if self.playerY - self.cameray > 800:
                 print("die reached")
                 self.player_died = True
+                mixer.music.fadeout(2000)
                 self.die()
             if self.player_died:
                 self.cameray = 0
