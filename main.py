@@ -32,6 +32,7 @@ class GatorJump:
         self.in_main_menu = True
         self.play_button = buttons.buttons((255, 255, 255), self.screen_width/2 - 200, (self.screen_length*0.8), 200, 100, "Play!")
         self.menuMusic = mixer.Sound('img/menuMusic.wav')
+        self.return_to_menu = buttons.buttons((255, 255, 255), self.screen_width/2 - 300, (self.screen_length*0.8), 350, 100, "Back to Main Menu")
 
     def updatePlayer(self):
         if not self.jump:
@@ -145,27 +146,26 @@ class GatorJump:
         self.player_died = True
         message = self.font.render("You died...", True, (255, 255, 255))
         message2 = self.font.render("Your Score is: " + str(self.score_value), True, (255, 255, 255))
-        message3 = self.font.render("Press ESC to go back to Main Menu", True, (255, 255, 255))
-        message4 = self.font.render("Or Press Any Key to Play Again!", True, (255, 255, 255))
+        #message3 = self.font.render("Press ESC to go back to Main Menu", True, (255, 255, 255))
+        message4 = self.font.render("Press Any Key to Play Again!", True, (255, 255, 255))
         self.screen.blit(message, (self.screen_length*0.35, self.screen_width*0.35))
         self.screen.blit(message2, (self.screen_length*0.27, self.screen_width*0.4))
-        self.screen.blit(message3, (self.screen_length*0.01, self.screen_width*0.45))
-        self.screen.blit(message4, (self.screen_length*0.04, self.screen_width*0.50))
+        #self.screen.blit(message3, (self.screen_length*0.01, self.screen_width*0.45))
+        self.screen.blit(message4, (self.screen_length*0.1, self.screen_width*0.45))
+        self.return_to_menu.draw_button(self.screen, 40, (0,0,0))
         pygame.display.update()     #adding this prints message!!!
         while True:
             for event in pygame.event.get():
-                if event.type == QUIT:
-                    pygame.quit()
+                if event.type == pygame.QUIT:
+                    #pygame.quit()
                     sys.exit()
-<<<<<<< HEAD
-                if event.type == KEYDOWN:
-                    mixer.music.play(-1)
-=======
-                key = pygame.key.get_pressed()
-                if key[K_ESCAPE]:
-                    self.main_menu()
-                else:
->>>>>>> aa90452a8b05ec74823888b7f63430b8aceb22cd
+                #key = pygame.key.get_pressed()
+                mouse_pos = pygame.mouse.get_pos()
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    if self.return_to_menu.is_over(mouse_pos):
+                        self.in_main_menu = True
+                        return
+                if event.type == pygame.KEYDOWN:
                     return
 
     def draw_menu(self):
@@ -191,6 +191,7 @@ class GatorJump:
                     sys.exit()
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if self.play_button.is_over(mouse_pos):
+                        self.in_main_menu = False
                         return    
         
     def run(self):
@@ -226,6 +227,8 @@ class GatorJump:
                 self.playerY = 600
                 self.generatePlatform()
                 self.player_died = False
+            if self.in_main_menu:
+                self.main_menu()
             self.drawPlatform()
             self.updatePlayer()
             self.showScore()
